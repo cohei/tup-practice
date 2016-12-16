@@ -1,0 +1,11 @@
+include_rules
+
+: |> touch %o |> file
+: |> touch %o |> other
+: foreach file other |> cp %f %o |> %B1
+: foreach file other |> cp %f %o |> %B2
+
+!tar = |> tar -cf %o %f |>
+
+: file1 file2 |> tar -cf %o %f |> result.tar
+: list.txt | other1 other2 |> tar -cf %o -T %f |> result2.tar

@@ -1,0 +1,15 @@
+include_rules
+
+: |> echo "generated text" > %o |> generated.txt
+: |> echo "unused text" > %o |> unused.txt
+: generated.txt unused.txt |> ./test.sh > %o |> output.txt
+: |> ./gen_triangle.sh > %o |> triangle.h
+
+CFLAGS += -Inewmath
+
+: foreach *.c | triangle.h |> !cc |>
+: *.o newmath/libnewmath.a |> gcc %f -o %o |> hello
+
+GHC_FLAGS += -O2
+
+: hello2.hs |> stack ghc -- $(GHC_FLAGS) %f -o %o |> %B | %B.o %B.hi
